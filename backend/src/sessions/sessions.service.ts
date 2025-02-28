@@ -17,6 +17,38 @@ export class SessionsService {
     @InjectRepository(Session)
     private readonly sessionRepository: Repository<Session>,
   ) {}
+  // Round-Robin Distribution
+  // async generateTeams(generateTeamsDto: GenerateTeamsDto) {
+  //   const { generationName, teams, players } = generateTeamsDto;
+
+  //   const session = this.sessionRepository.create({
+  //     id: uuidv4(),
+  //     generationName,
+  //   });
+  //   await this.sessionRepository.save(session);
+
+  //   const savedTeams = await this.teamRepository.save(
+  //     teams.map((team) => ({ ...team, session })),
+  //   );
+
+  //   const shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
+  //   const assignedPlayers = shuffledPlayers.map((player, index) => ({
+  //     ...player,
+  //     team: savedTeams[index % savedTeams.length],
+  //     session,
+  //   }));
+
+  //   const savedPlayers = await this.playerRepository.save(assignedPlayers);
+
+  //   const generatedTeams = savedTeams.map((team) => ({
+  //     ...team,
+  //     players: savedPlayers.filter((player) => player.team.id === team.id),
+  //   }));
+
+  //   return { sessionId: session.id, teams: generatedTeams };
+  // }
+
+  // Balanced Skill Distribution
   async generateTeams(generateTeamsDto: GenerateTeamsDto) {
     const { generationName, teams, players } = generateTeamsDto;
 
@@ -30,20 +62,41 @@ export class SessionsService {
       teams.map((team) => ({ ...team, session })),
     );
 
-    const shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
-    const assignedPlayers = shuffledPlayers.map((player, index) => ({
-      ...player,
-      team: savedTeams[index % savedTeams.length],
-      session,
-    }));
+    const sortedPlayers = [...players].sort(
+      (a, b) => (b.skillLevel || 0) - (a.skillLevel || 0),
+    );
 
+    // Initialize an array to keep track of the current skill level for each team
+    const teamSkills = savedTeams.map(() => 0); // This will track the total skill level of each team
+
+    //  Assign players to teams based on the current team skill totals
+    const assignedPlayers = sortedPlayers.map((player) => {
+      // Find the index of the team with the lowest total skill level
+      const minSkillTeamIndex = teamSkills.indexOf(Math.min(...teamSkills));
+
+      // Assign the player to that team
+      const team = savedTeams[minSkillTeamIndex];
+
+      // Update the team's total skill level
+      teamSkills[minSkillTeamIndex] += player.skillLevel || 0;
+
+      return {
+        ...player,
+        team,
+        session,
+      };
+    });
+
+    // Save the players with their assigned teams
     const savedPlayers = await this.playerRepository.save(assignedPlayers);
 
+    // Associate the players with their respective teams
     const generatedTeams = savedTeams.map((team) => ({
       ...team,
       players: savedPlayers.filter((player) => player.team.id === team.id),
     }));
 
+    // Return the session ID and the generated teams with players
     return { sessionId: session.id, teams: generatedTeams };
   }
 
