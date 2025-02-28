@@ -18,7 +18,7 @@ const Home: React.FC = () => {
 
   const generateTeams = async () => {
     try {
-      if (!players?.length || !teams?.length) {
+      if (!players?.length || !teams?.length || !generationName?.length) {
         confirm("Players, Teams or Title cannot be empty!");
         return;
       }
