@@ -43,7 +43,11 @@ const PlayerForm: React.FC<PlayerFormProps> = ({
             updatePlayer(index, e.target.value, player.skillLevel)
           }
           onSkillChange={(skill) => updatePlayer(index, player.name, skill)}
-          onDelete={() => removePlayer(index)}
+          onDelete={() => {
+            return confirm("Are you sure, you want to delete this player!")
+              ? removePlayer(index)
+              : () => {};
+          }}
         />
       ))}
       <AddButton

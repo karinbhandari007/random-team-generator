@@ -38,7 +38,11 @@ const TeamForm: React.FC<TeamFormProps> = ({
           wrapperClassName="mt-4"
           value={team.name}
           onChange={(e) => updateTeam(index, e.target.value)}
-          onDelete={() => removeTeam(index)}
+          onDelete={() => {
+            return confirm("Are you sure, you want to delete this team!")
+              ? removeTeam(index)
+              : () => {};
+          }}
         />
       ))}
       <AddButton

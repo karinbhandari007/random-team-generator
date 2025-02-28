@@ -8,14 +8,16 @@ type TeamGenerationProps = {
 };
 
 const TeamGeneration: React.FC<TeamGenerationProps> = ({ generatedTeams }) => {
+  if (!generatedTeams?.length) return <></>;
+
   return (
-    <div className="flex flex-row flex-wrap justify-center">
-      {generatedTeams.map((team, index) => (
+    <div className="flex flex-row flex-wrap justify-center bg-[#EBEBEB] pt-6 pb-10">
+      {generatedTeams?.map((team, index) => (
         <TeamList
           key={index}
           teamNo={index + 1}
           players={team.players}
-          className="mr-6"
+          className="mr-8"
         />
       ))}
     </div>
