@@ -1,7 +1,6 @@
 import axios from "axios";
 import { IGenerateTeamsReq } from "./types";
 
-// TODO: import URL  from env
 export const _generateTeams = async (generateTeams: IGenerateTeamsReq) =>
   await axios.post(
     process.env.NEXT_PUBLIC_BASE_URL + "/sessions",

@@ -31,7 +31,7 @@ const Input: FunctionComponent<InputProps> = ({
       </button>
       <input
         type="text"
-        className="flex-6 border border-gray-300 px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="flex-6 border border-gray-300 px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 outline-none"
         value={value}
         onChange={onChange}
       />

@@ -7,13 +7,13 @@ type Player = {
 };
 
 type TeamListProps = {
-  teamNo: number;
+  teamName: string;
   players: Player[];
   className?: string;
 };
 
 const TeamList: React.FC<TeamListProps> = ({
-  teamNo,
+  teamName,
   players,
   className = "",
 }) => {
@@ -25,7 +25,7 @@ const TeamList: React.FC<TeamListProps> = ({
   return (
     <div className={`${className}`}>
       <h2 className="text-l font-bold">
-        Team {teamNo} <span className="text-gray-400">({players?.length})</span>
+        {teamName} <span className="text-gray-400">({players?.length})</span>
       </h2>
       {players.length > 0 ? (
         players.map((player, index) => (

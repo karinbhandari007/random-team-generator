@@ -18,9 +18,12 @@ export class SessionsService {
     private readonly sessionRepository: Repository<Session>,
   ) {}
   async generateTeams(generateTeamsDto: GenerateTeamsDto) {
-    const { teams, players } = generateTeamsDto;
+    const { generationName, teams, players } = generateTeamsDto;
 
-    const session = this.sessionRepository.create({ id: uuidv4() });
+    const session = this.sessionRepository.create({
+      id: uuidv4(),
+      generationName,
+    });
     await this.sessionRepository.save(session);
 
     const savedTeams = await this.teamRepository.save(
@@ -44,9 +47,12 @@ export class SessionsService {
     return { sessionId: session.id, teams: generatedTeams };
   }
 
-  async getSession(
-    sessionId: string,
-  ): Promise<{ sessionId: string; teams: any[]; players: Player[] } | null> {
+  async getSession(sessionId: string): Promise<{
+    sessionId: string;
+    generationName: string;
+    teams: any[];
+    players: Player[];
+  } | null> {
     const session = await this.sessionRepository.findOne({
       where: { id: sessionId },
       relations: ['teams', 'players', 'players.team', 'teams.players'],
@@ -58,6 +64,7 @@ export class SessionsService {
 
     return {
       sessionId: session.id,
+      generationName: session.generationName,
       teams: session.teams.map((team) => {
         return {
           id: team.id,

@@ -15,7 +15,7 @@ const TeamGeneration: React.FC<TeamGenerationProps> = ({ generatedTeams }) => {
       {generatedTeams?.map((team, index) => (
         <TeamList
           key={index}
-          teamNo={index + 1}
+          teamName={team?.name}
           players={team.players}
           className="mr-8"
         />

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, OneToMany, Column } from 'typeorm';
 import { Team } from 'src/teams/entities/team.entity';
 import { Player } from 'src/players/entities/player.entity';
 
@@ -6,6 +6,9 @@ import { Player } from 'src/players/entities/player.entity';
 export class Session {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({ nullable: true })
+  generationName: string;
 
   @OneToMany(() => Team, (team) => team.session)
   teams: Team[];

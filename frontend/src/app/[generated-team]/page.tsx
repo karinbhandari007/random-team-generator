@@ -11,6 +11,7 @@ import { useParams } from "next/navigation";
 const GeneratedTeam: React.FC = () => {
   const query = useParams();
   const [generatedTeams, setGeneratedTeams] = useState<IGeneratedTeam[]>([]);
+  const [generationName, setGenerationName] = useState<string>("");
 
   const url = useMemo(() => window?.location?.href, []);
 
@@ -36,6 +37,7 @@ const GeneratedTeam: React.FC = () => {
         query?.["generated-team"] as string
       );
       setGeneratedTeams(resp?.data?.teams);
+      setGenerationName(resp?.data?.generationName);
     } catch (err: unknown) {
       console.log("Error: [getSessionDetails]", err);
     }
@@ -48,9 +50,7 @@ const GeneratedTeam: React.FC = () => {
   return (
     <div className="p-6">
       <div className="py-2 px-4 bg-[#32373C] mb-4">
-        <p className="text-l text-white font-bold">
-          Friday Futsal - Change this
-        </p>
+        <p className="text-l text-white font-bold">{generationName}</p>
         <p className="text-xs text-gray-300">
           {playersLen} participants in {teamLen} teams{" "}
         </p>
@@ -62,7 +62,10 @@ const GeneratedTeam: React.FC = () => {
           <span className="text-xs text-[#878787]">(public draw)</span>
         </p>
         <div>
-          <input className="min-w-[500px] border py-2 px-3" value={url} />
+          <input
+            className="min-w-[500px] border py-2 px-3 outline-none"
+            value={url}
+          />
           <button className="border py-2 px-2" onClick={copyToClipboard}>
             &#x1F4CB;
           </button>

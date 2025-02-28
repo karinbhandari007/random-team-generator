@@ -10,6 +10,7 @@ import { AxiosResponse } from "axios";
 import { ISessionResponse } from "@/api/types";
 
 const Home: React.FC = () => {
+  const [generationName, setGenerationName] = useState<string>("");
   const [players, setPlayers] = useState<Player[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -18,12 +19,13 @@ const Home: React.FC = () => {
   const generateTeams = async () => {
     try {
       if (!players?.length || !teams?.length) {
-        confirm("Players or Teams cannot be empty!");
+        confirm("Players, Teams or Title cannot be empty!");
         return;
       }
       setLoading(true);
       const resp: AxiosResponse<Omit<ISessionResponse, "players">> =
         await _generateTeams({
+          generationName,
           teams,
           players,
         });
@@ -61,6 +63,11 @@ const Home: React.FC = () => {
       </div>
 
       <div className="pt-6 flex flex-row justify-center">
+        <input
+          placeholder="Title"
+          onChange={(e) => setGenerationName(e.target.value)}
+          className="radius-none border p-2 outline-none"
+        />
         <Button
           disabled={loading}
           text={loading ? "Generating..." : "Generate Teams"}

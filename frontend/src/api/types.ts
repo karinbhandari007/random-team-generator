@@ -1,6 +1,7 @@
 import { Player, Team } from "@/types";
 
 export interface IGenerateTeamsReq {
+  generationName: string;
   teams: Team[];
   players: Player[];
 }
@@ -23,6 +24,7 @@ export interface ITeam {
 
 export interface ISessionResponse {
   sessionId: string;
+  generationName: string;
   teams: ITeam[];
   players: IPlayer[];
 }

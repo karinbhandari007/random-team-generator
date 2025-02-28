@@ -8,6 +8,9 @@ export class TeamDto {
 }
 
 export class GenerateTeamsDto {
+  @IsString()
+  generationName: string;
+
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => TeamDto)
